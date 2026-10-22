@@ -1,8 +1,5 @@
-<div align="center">
 🔒 Password Breach Checker
-A command-line tool that checks whether a password has appeared in known data breaches, using the Have I Been Pwned "Pwned Passwords" API.
-The password itself is never sent: only the first 5 characters of its SHA-1 hash leave your machine.
-</div>
+A command-line tool that checks whether a password has appeared in known data breaches, using the Have I Been Pwned "Pwned Passwords" API. The password itself is never sent: only the first 5 characters of its SHA-1 hash leave your machine.
 ---
 🎬 Demo
 (Add your GIF or screenshot here)
@@ -21,7 +18,9 @@ A count of 0 does not mean the password is safe. It only means it was not found 
 Any count above 0 is a good reason to stop using that password.
 ---
 🚀 Usage
-Requires Python 3.x and the requests library.
+Requirements
+Requires Python 3.x and the `requests` library.
+Run
 ```bash
 git clone https://github.com/joaopedrorochavasconcelos04-ui/password-breach-checker.git
 cd password-breach-checker
@@ -29,7 +28,7 @@ pip install requests
 python main.py
 ```
 The script asks for a password (the input is masked) and prints how many times it was found in known breaches. A result of 0 means it was not found.
-While testing, use throwaway passwords such as `password123`, never a real one.
+> ⚠️ **Important:** While testing, use throwaway passwords such as `password123`, never a real one.
 ---
 💡 What I learned
 k-anonymity in practice: splitting the hash with `h[:5]` and `h[5:]` so the API never sees which password I am checking.
@@ -49,4 +48,4 @@ It checks one password at a time.
 [ ] Check passwords from a file in bulk.
 ---
 📝 Credits and disclaimer
-Built with the free Pwned Passwords API from Have I Been Pwned. This is an educational project and does not replace a password maneger.
+Built with the free Pwned Passwords API from Have I Been Pwned. This is an educational project and does not replace a password manager.
