@@ -2,13 +2,12 @@
 
 > A fast, privacy-focused tool to check if a password has been exposed in data breaches without ever sending the full password over the internet.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-![Privacy First](https://img.shields.io/badge/privacy-k--anonymity-green)
+
 
 ---
 
-![Demo GIF](https://via.placeholder.com/800x400.png?text=Demo+GIF+Placeholder) <!-- Replace with your actual GIF or image link -->
+![Demo GIF](https://via.placeholder.com/800x400.png?text=Demo+GIF+Placeholder) <!-- i'll replace it with my actual GIF -->
 
 ## 🛠️ How it works
 
@@ -75,4 +74,4 @@ Building this project allowed me to deepen my understanding of practical cyberse
 
 ---
 
-Developed with 🔒 privacy in mind.
+Developed with privacy in mind.
