@@ -1,98 +1,100 @@
 import hashlib, json, os, urllib.error, urllib.request, time
 
-def checar_senha_api(senha):
-    h = hashlib.sha1(senha.encode()).hexdigest().upper()
-    url = f"https://api.pwnedpasswords.com/range/{h[:5]}"
+
+def check_password_api(password):
+    password_hash = hashlib.sha1(password.encode()).hexdigest().upper()
+    url = f"https://api.pwnedpasswords.com/range/{password_hash[:5]}"
     try:
-        with urllib.request.urlopen(url) as r:
-            texto = r.read().decode("utf-8")
-    except urllib.error.HTTPError as erro:
-        return {"status": "erro", "erro_codigo": erro.code}
+        with urllib.request.urlopen(url) as response:
+            response_text = response.read().decode("utf-8")
+    except urllib.error.HTTPError as error:
+        return {"status": "error", "error_code": error.code}
 
-    for linha in texto.split():
-        fim, qtd = linha.split(":")
-        if fim == h[5:]:
-            return {"status": "sucesso", "vazamentos": int(qtd)}
-            
-    return {"status": "sucesso", "vazamentos": 0}
+    for line in response_text.split():
+        suffix, count = line.split(":")
+        if suffix == password_hash[5:]:
+            return {"status": "success", "breach_count": int(count)}
 
-# --- MENU PRINCIPAL ---
+    return {"status": "success", "breach_count": 0}
+
+
+# --- MAIN MENU ---
 print("=========================================")
-print("Verificador de vazamentos de senha:")
-print("1 - Verificação por lotes (Arquivos .txt)")
-print("2 - Verificação única (Input)")
+print("Password Breach Checker:")
+print("1 - Batch check (TXT file)")
+print("2 - Single password check")
 print("=========================================")
 
-opcao = input("Escolha uma opção (1 ou 2): ").strip()
+option = input("Choose an option (1 or 2): ").strip()
 
-# Guard Clause: Opção inválida
-if opcao not in ("1", "2"):
-    print(json.dumps({"erro": "Opção inválida do menu"}, indent=4, ensure_ascii=False))
+# Guard clause: invalid menu choice
+if option not in ("1", "2"):
+    print(json.dumps({"error": "Invalid menu choice"}, indent=4))
     exit()
 
-# --- FLUXO 1: VERIFICAÇÃO EM LOTE ---
-if opcao == "1":
-    nome_arquivo = input("Digite o nome do arquivo (ex: senhas.txt): ").strip()
-    
-    # Guard Clauses
-    if not nome_arquivo:
-        print(json.dumps({"erro": "O nome do arquivo não pode ser vazio"}, indent=4, ensure_ascii=False))
-        exit()
-        
-    if not os.path.exists(nome_arquivo):
-        print(json.dumps({"erro": f"O arquivo '{nome_arquivo}' não foi encontrado"}, indent=4, ensure_ascii=False))
+# --- FLOW 1: BATCH CHECK ---
+if option == "1":
+    filename = input("Enter the file name (e.g. sample_passwords.txt): ").strip()
+
+    # Guard clauses
+    if not filename:
+        print(json.dumps({"error": "The file name cannot be empty"}, indent=4))
         exit()
 
-    # Dicionário que vai guardar a estrutura final do JSON
-    resultado_final = {
-        "tipo_verificacao": "lote",
-        "arquivo_origem": nome_arquivo,
-        "resultados": {}
+    if not os.path.exists(filename):
+        print(json.dumps({"error": f"File '{filename}' was not found"}, indent=4))
+        exit()
+
+    # Store the results that will be serialized as JSON
+    final_result = {
+        "verification_type": "batch",
+        "source_file": filename,
+        "results": {}
     }
 
-    with open(nome_arquivo, "r", encoding="utf-8") as arquivo:
-        for linha in arquivo:
-            senha = linha.strip()
-            if not senha: 
+    with open(filename, "r", encoding="utf-8") as file:
+        for line in file:
+            password = line.strip()
+            if not password:
                 continue
-            
-            resposta = checar_senha_api(senha)
-            
-            # Alimenta o dicionário usando a senha como chave
-            if resposta["status"] == "sucesso":
-                resultado_final["resultados"][senha] = {
-                    "vazada": resposta["vazamentos"] > 0,
-                    "quantidade": resposta["vazamentos"]
+
+            result = check_password_api(password)
+
+            # Use each password as the key in the results object
+            if result["status"] == "success":
+                final_result["results"][password] = {
+                    "exposed": result["breach_count"] > 0,
+                    "count": result["breach_count"]
                 }
             else:
-                resultado_final["resultados"][senha] = {
-                    "erro": f"Falha na API (Status {resposta['erro_codigo']})"
+                final_result["results"][password] = {
+                    "error": f"API request failed (status {result['error_code']})"
                 }
-            
+
             time.sleep(0.5)
 
-    # Converte o dicionário final para uma string formatada em JSON e exibe
-    json_output = json.dumps(resultado_final, indent=4, ensure_ascii=False)
+    # Serialize and print the final result as formatted JSON
+    json_output = json.dumps(final_result, indent=4)
     print("\n--- OUTPUT JSON ---")
     print(json_output)
 
-# --- FLUXO 2: VERIFICAÇÃO ÚNICA ---
-elif opcao == "2":
-    senha_unica = input("Digite a senha que deseja consultar: ")
-    
-    # Guard Clause
-    if not senha_unica:
-        print(json.dumps({"erro": "Nenhuma senha foi digitada"}, indent=4, ensure_ascii=False))
+# --- FLOW 2: SINGLE PASSWORD CHECK ---
+elif option == "2":
+    password = input("Enter the password to check: ")
+
+    # Guard clause
+    if not password:
+        print(json.dumps({"error": "No password was entered"}, indent=4))
         exit()
 
-    resposta = checar_senha_api(senha_unica)
-    
-    resultado_unico = {
-        "tipo_verificacao": "unica",
-        "senha_analisada": senha_unica,
-        "vazada": resposta.get("vazamentos", 0) > 0 if resposta["status"] == "sucesso" else "erro",
-        "quantidade": resposta.get("vazamentos", 0) if resposta["status"] == "sucesso" else 0
+    result = check_password_api(password)
+
+    single_result = {
+        "verification_type": "single",
+        "password_checked": password,
+        "exposed": result.get("breach_count", 0) > 0 if result["status"] == "success" else "error",
+        "count": result.get("breach_count", 0) if result["status"] == "success" else 0
     }
-    
+
     print("\n--- OUTPUT JSON ---")
-    print(json.dumps(resultado_unico, indent=4, ensure_ascii=False))
+    print(json.dumps(single_result, indent=4))

@@ -6,7 +6,7 @@
 
 ---
 
-![Demonstração do Password Breach Checker](demo.gif)
+![Password Breach Checker demo](demo.gif)
 
 ## ✨ Features
 
@@ -38,25 +38,25 @@ Privacy comes first. This tool uses the **k-Anonymity** model provided by the Ha
 
 ### Prerequisites
 - Python 3.8 or higher installed on your system.
-- No third-party packages are required.
+- The script uses Python's standard library modules, so no additional packages need to be installed.
 
 ### Quick Start
 
 1. **Run the checker from the repository directory:**
    ```bash
-   python Senha.py
+   python password-breach-checker.py
    ```
 
 2. **Choose a verification mode:**
    - Enter `1` to check passwords from a text file, with one password per line.
    - Enter `2` to check a single password interactively.
 
-For batch verification, select option `1` and enter `senhas_exemplo.txt` to try the sample file included in the repository. It contains fictional values, one per line:
+For batch verification, select option `1` and enter `sample_passwords.txt` to try the sample file included in the repository. It contains fictional values, one per line:
 
 ```text
-Exemplo-Ficticio-01-2026
-Nao-Use-Como-Senha-Real-02
-Senha-Demonstracao-03
+Fictional-Example-01-2026
+Do-Not-Use-As-Real-Password-02
+Password
 ```
 
 You can also provide the path to another `.txt` file, with one password per line. Empty lines are skipped. The result is printed as JSON with a result for each password.
@@ -67,10 +67,10 @@ The sample values are only for trying out the batch workflow. Their presence or 
 
 ```json
 {
-    "tipo_verificacao": "unica",
-    "senha_analisada": "example-password",
-    "vazada": true,
-    "quantidade": 4210
+    "verification_type": "single",
+    "password_checked": "example-password",
+    "exposed": true,
+    "count": 4210
 }
 ```
 
@@ -79,11 +79,11 @@ The sample values are only for trying out the batch workflow. Their presence or 
 **Example terminal session:**
 
 ```text
-Verificador de vazamentos de senha:
-1 - Verificação por lotes (Arquivos .txt)
-2 - Verificação única (Input)
-Escolha uma opção (1 ou 2): 2
-Digite a senha que deseja consultar: example-password
+Password Breach Checker:
+1 - Batch check (TXT file)
+2 - Single password check
+Choose an option (1 or 2): 2
+Enter the password to check: example-password
 ```
 
 The script prints the result as formatted JSON:
@@ -91,14 +91,14 @@ The script prints the result as formatted JSON:
 ```text
 --- OUTPUT JSON ---
 {
-    "tipo_verificacao": "unica",
-    "senha_analisada": "example-password",
-    "vazada": true,
-    "quantidade": 4210
+    "verification_type": "single",
+    "password_checked": "example-password",
+    "exposed": true,
+    "count": 4210
 }
 ```
 
-For a password with no matching entry, `vazada` is `false` and `quantidade` is `0`. A zero count does not guarantee that a password is strong or has never been exposed.
+For a password with no matching entry, `exposed` is `false` and `count` is `0`. A zero count does not guarantee that a password is strong or has never been exposed.
 
 ---
 
