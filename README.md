@@ -6,7 +6,7 @@
 
 ---
 
-![Demo GIF](https://via.placeholder.com/800x400.png?text=Demo+GIF+Placeholder) <!-- i'll replace it with my actual GIF -->
+![Demonstração do Password Breach Checker](demo.gif)
 
 ## ✨ Features
 
