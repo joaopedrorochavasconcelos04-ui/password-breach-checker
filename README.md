@@ -24,6 +24,8 @@ Privacy comes first. This tool uses the **k-Anonymity** model provided by the Ha
 3. 📦 **Suffix Fetching:** The API returns a list of matching hash suffixes along with how many times each hash appeared in known data breaches.
 4. 💻 **Local Matching:** The script compares the full hash locally against the returned list to find a match. **Your plain password never leaves your machine.**
 
+![K-anonymity password verification flow](<K-ANONYMITY(English).png>)
+
 ---
 
 ## 📊 What the number means (and doesn't)
