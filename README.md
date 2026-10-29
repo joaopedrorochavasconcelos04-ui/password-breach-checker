@@ -1,13 +1,19 @@
 # 🔐 Password Breach Checker
 
-> A fast, privacy-focused tool to check if a password has been exposed in data breaches without ever sending the full password over the internet.
+> A privacy-focused tool to check whether passwords have appeared in known data breaches without sending the full password over the internet.
 
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-
 
 ---
 
 ![Demo GIF](https://via.placeholder.com/800x400.png?text=Demo+GIF+Placeholder) <!-- i'll replace it with my actual GIF -->
+
+## ✨ Features
+
+- Check one password or process multiple passwords from a `.txt` file.
+- Ignore blank lines in batch files.
+- Return results as formatted JSON, including the number of known exposures.
+- Validate menu choices, password input, and file paths with guard clauses.
 
 ## 🛠️ How it works
 
@@ -32,28 +38,64 @@ Privacy comes first. This tool uses the **k-Anonymity** model provided by the Ha
 
 ### Prerequisites
 - Python 3.8 or higher installed on your system.
+- No third-party packages are required.
 
 ### Quick Start
 
-1. **Clone the repository and install dependencies:**
+1. **Run the checker from the repository directory:**
    ```bash
-   pip install requests
+   python Senha.py
    ```
 
-2. **Run the checker:**
-   ```bash
-   python main.py
-   ```
+2. **Choose a verification mode:**
+   - Enter `1` to check passwords from a text file, with one password per line.
+   - Enter `2` to check a single password interactively.
 
-3. **Example Output:**
-   ```text
-   $ python main.py
-   Enter password to check: **********
+For batch verification, create a `.txt` file such as `senhas.txt`:
 
-   ⚠️  WARNING: Password found! 
-   This password has been exposed 4,210 times in known data breaches.
-   Recommendation: Change this password immediately.
-   ```
+```text
+example-password-one
+example-password-two
+```
+
+When prompted, enter the file path (for example, `senhas.txt`). Empty lines are skipped.
+
+**Example output for a single password:**
+
+```json
+{
+    "tipo_verificacao": "unica",
+    "senha_analisada": "example-password",
+    "vazada": true,
+    "quantidade": 4210
+}
+```
+
+**Privacy note:** The full password is not sent to the API; only the first five characters of its SHA-1 hash are sent. However, the batch input file contains passwords in plain text, and the JSON output includes the checked password. Use only files you can protect, and do not commit real password files or share the output.
+
+**Example terminal session:**
+
+```text
+Verificador de vazamentos de senha:
+1 - Verificação por lotes (Arquivos .txt)
+2 - Verificação única (Input)
+Escolha uma opção (1 ou 2): 2
+Digite a senha que deseja consultar: example-password
+```
+
+The script prints the result as formatted JSON:
+
+```text
+--- OUTPUT JSON ---
+{
+    "tipo_verificacao": "unica",
+    "senha_analisada": "example-password",
+    "vazada": true,
+    "quantidade": 4210
+}
+```
+
+For a password with no matching entry, `vazada` is `false` and `quantidade` is `0`. A zero count does not guarantee that a password is strong or has never been exposed.
 
 ---
 
@@ -70,7 +112,6 @@ Building this project allowed me to deepen my understanding of practical cyberse
 
 - [ ] Add a secure, customizable random password generator.
 - [ ] Build a local brute-force demonstration tool (using harmless test passwords) to illustrate entropy and cracking speeds.
-- [ ] Add support for checking passwords from a file in bulk (hashed locally).
 
 ---
 
