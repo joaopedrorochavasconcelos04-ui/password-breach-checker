@@ -51,14 +51,17 @@ Privacy comes first. This tool uses the **k-Anonymity** model provided by the Ha
    - Enter `1` to check passwords from a text file, with one password per line.
    - Enter `2` to check a single password interactively.
 
-For batch verification, create a `.txt` file such as `senhas.txt`:
+For batch verification, select option `1` and enter `senhas_exemplo.txt` to try the sample file included in the repository. It contains fictional values, one per line:
 
 ```text
-example-password-one
-example-password-two
+Exemplo-Ficticio-01-2026
+Nao-Use-Como-Senha-Real-02
+Senha-Demonstracao-03
 ```
 
-When prompted, enter the file path (for example, `senhas.txt`). Empty lines are skipped.
+You can also provide the path to another `.txt` file, with one password per line. Empty lines are skipped. The result is printed as JSON with a result for each password.
+
+The sample values are only for trying out the batch workflow. Their presence or absence in the breach database is not guaranteed, and they should never be used as real passwords.
 
 **Example output for a single password:**
 
@@ -71,7 +74,7 @@ When prompted, enter the file path (for example, `senhas.txt`). Empty lines are 
 }
 ```
 
-**Privacy note:** The full password is not sent to the API; only the first five characters of its SHA-1 hash are sent. However, the batch input file contains passwords in plain text, and the JSON output includes the checked password. Use only files you can protect, and do not commit real password files or share the output.
+**Privacy note:** The full password is not sent to the API; only the first five characters of its SHA-1 hash are sent. However, input files contain passwords in plain text, and the JSON output includes the checked passwords. Use only files you can protect, and never commit real password files or share their output.
 
 **Example terminal session:**
 
